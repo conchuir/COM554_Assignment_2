@@ -1,9 +1,11 @@
 // Cookie Management
+// Add value to localstorage when cookie message is dismissed
 function cookie_adcknowledge() {
     "use strict";
     localStorage.setItem("cookie_acknowledge", true);
 }
 
+// SHow cookie message if localstorage value is not present
 $(document).ready(function () {
     "use strict";
     if (localStorage.getItem("cookie_acknowledge")) {
@@ -17,24 +19,24 @@ $(document).ready(function () {
 function loadNews(url, tab_number) {
     $.getJSON(url, function(data) {
         $items = data['response']['results'];
-        console.log(url);
-        console.log($items);
 
         // Add first news item to Jumbrotron box
-        $("#j_button_"+ tab_number).attr("href", $items[0]['webUrl']);
+        $("#j_button_"+ tab_number).attr("onclick", "loadModal(\""+ $items[0]['id'] +"\")");
         $("#j_title_"+ tab_number).append($items[0]['webTitle']);
         $("#jumbotron_"+ tab_number).css({"background":"linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255, 0.45)),url("+ $items[0]['fields']['thumbnail'] +") no-repeat","background-size":"100%"});
 
         //Add News Items
         var j=0;
         for (i=1; i<$items.length; i++) {
+            // Create rown to hold items - provides better layout
             if (i%3 == 1) {
                 j++;
                 $('#holder_'+tab_number).append('<div class="row_contain" id="row_contain_'+ tab_number +'_'+ j +'"></div>');
             }
 
             // Build news item html
-            var news_item = "\
+            var news_item = "";
+            news_item += "\
                 <div id=\""+ $items[i]['id'] +"\" class=\"col-xs-6 col-sm-4\">\
                     <div class=\"panel panel-default\">\
                         <div class=\"panel-body\">\
@@ -44,33 +46,52 @@ function loadNews(url, tab_number) {
                             <h3>"+ $items[i]['webTitle'] +"</h3>\
                             <p>by "+ $items[i]['fields']['byline'] +"</p>\
                             <p>"+ $items[i]['webPublicationDate'].replace(/T|Z/g, ' ') +"</p>\
-                            <button type=\"button\" class=\"btn btn-info btn-lg\" data-toggle=\"modal\" data-target=\"#modal_"+ tab_number + "_" + j + "_" + i +"\">Open</button>\
+                            <button type=\"button\" class=\"btn btn-info btn-lg\" data-toggle=\"modal\" data-target=\"#news_item_modal\" onclick=\"loadModal('"+ $items[i]['id'] +"')\">Open</button>\
                         <div>\
                     </div>\
                 </div>";
-            var news_item_modal = "\
-                <div id=\"modal_"+ tab_number + "_" + j + "_" + i +"\" class=\"modal fade\" role=\"dialog\">\
-                    <div class=\"modal-dialog\">\
-                        <div class=\"modal-content\">\
-                            <div class=\"modal-header\">\
-                                <button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>\
-                            </div>\
-                            <div class=\"modal-body\">\
-                                <img src=\""+ $items[i]['fields']['thumbnail'] +"\" alt=\""+ $items[i]['webTitle'] +"\" style=\"width: 100%\">\
-                                <h4 class=\"modal-title\">"+ $items[i]['webTitle'] +"</h4>\
-                                <p>"+ $items[i]['fields']['body'] +"</p>\
-                            </div>\
-                        </div>\
-                    </div>\
-                </div>";
-            $("#row_contain_"+ tab_number +"_"+j).append(news_item_modal);
+            // Append to row div
             $("#row_contain_"+ tab_number +"_"+j).append(news_item);
 
+            if (checkRead($items[i]['id'])) {
+                fade($items[i]['id']);
+            }
         }
     });
 }
 
+// Load news data into the modal
+function loadModal(id) {
+    var url = buildUrl(id, "");
+    $.getJSON(url, function(data) {
+        $item = data['response']['content'];
+        $("#modal_img").attr("src", $item['fields']['thumbnail']);
+        $("#modal_title").html($item['webTitle']);
+        $("#modal_text").html($item['fields']['body']);
+    });
+    markItemRead(id);
+}
 
+// Mark an item as read by adding it to loaclstorage
+function markItemRead(id)   {
+    "use strict";
+    localStorage.setItem(id, true);
+    fade(id);
+}
+
+function fade(id)   {
+    $("div[id='"+ id +"']").addClass("mark_read");
+}
+
+function checkRead(id)  {
+    if (localStorage.getItem(id)) {
+        return true;
+    }
+    return false;
+}
+
+
+// Tab creation
 // Adds tab list items to nav bar
 function addNavItem(name, id)    {
     "use strict";
@@ -85,7 +106,7 @@ function addTab(id)   {
                 <div id=\"tabs_"+ id +"\">\
                     <div class=\"jumbotron\" id=\"jumbotron_"+ id +"\">\
                         <h1 id=\"j_title_"+ id +"\"></h1>\
-                        <p><a href=\"\" id=\"j_button_"+ id +"\" class=\"btn btn-primary btn-lg\">View Story</a></p>\
+                        <p><a id=\"j_button_"+ id +"\" class=\"btn btn-primary btn-lg\" data-toggle=\"modal\" data-target=\"#news_item_modal\" onclick=\"\">View Story</a></p>\
                     </div>\
                     <div id='holder_"+ id +"'></div>\
                 </div>";
@@ -118,6 +139,7 @@ function buildContent(array)    {
         $( "#tabs" ).tabs();
     } );
 }
+
 
 // Build api request url
 function buildUrl(lp, ef)    {
