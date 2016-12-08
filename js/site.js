@@ -1,4 +1,4 @@
-//Cookie Management
+// Cookie Management
 function cookie_adcknowledge() {
     "use strict";
     localStorage.setItem("cookie_acknowledge", true);
@@ -17,8 +17,10 @@ $(document).ready(function () {
 function loadNews(url, tab_number) {
     $.getJSON(url, function(data) {
         $items = data['response']['results'];
+        console.log(url);
+        console.log($items);
 
-        //Add first news item to Jumbrotron box
+        // Add first news item to Jumbrotron box
         $("#j_button_"+ tab_number).attr("href", $items[0]['webUrl']);
         $("#j_title_"+ tab_number).append($items[0]['webTitle']);
         $("#jumbotron_"+ tab_number).css({"background":"linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255, 0.45)),url("+ $items[0]['fields']['thumbnail'] +") no-repeat","background-size":"100%"});
@@ -39,15 +41,31 @@ function loadNews(url, tab_number) {
                             <img class=\"news_thumb\" src=\""+ $items[i]['fields']['thumbnail'] +"\">\
                         <div>\
                         <div class=\"panel-footer\">\
-                            <a href=\""+ $items[i]['webUrl'] +"\">\
-                                <h3>"+ $items[i]['webTitle'] +"</h3>\
-                                <br \>\
-                                <p>"+ $items[i]['webPublicationDate'].replace(/T|Z/g, ' ') +"</p>\
-                            </a>\
+                            <h3>"+ $items[i]['webTitle'] +"</h3>\
+                            <p>by "+ $items[i]['fields']['byline'] +"</p>\
+                            <p>"+ $items[i]['webPublicationDate'].replace(/T|Z/g, ' ') +"</p>\
+                            <button type=\"button\" class=\"btn btn-info btn-lg\" data-toggle=\"modal\" data-target=\"#modal_"+ tab_number + "_" + j + "_" + i +"\">Open</button>\
                         <div>\
                     </div>\
                 </div>";
+            var news_item_modal = "\
+                <div id=\"modal_"+ tab_number + "_" + j + "_" + i +"\" class=\"modal fade\" role=\"dialog\">\
+                    <div class=\"modal-dialog\">\
+                        <div class=\"modal-content\">\
+                            <div class=\"modal-header\">\
+                                <button type=\"button\" class=\"close\" data-dismiss=\"modal\">&times;</button>\
+                            </div>\
+                            <div class=\"modal-body\">\
+                                <img src=\""+ $items[i]['fields']['thumbnail'] +"\" alt=\""+ $items[i]['webTitle'] +"\" style=\"width: 100%\">\
+                                <h4 class=\"modal-title\">"+ $items[i]['webTitle'] +"</h4>\
+                                <p>"+ $items[i]['fields']['body'] +"</p>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </div>";
+            $("#row_contain_"+ tab_number +"_"+j).append(news_item_modal);
             $("#row_contain_"+ tab_number +"_"+j).append(news_item);
+
         }
     });
 }
@@ -106,7 +124,7 @@ function buildUrl(lp, ef)    {
     "use strict";
     var domain = "https://content.guardianapis.com/";
     var api_key = "api-key=8b7ca0fc-3914-4473-9c07-e9b56781ce88";
-    var req_fields = "&show-fields=thumbnail";
+    var req_fields = "&show-fields=thumbnail%2Cbyline%2Cbody";
 
     if (ef != "")   {
         ef = ef + "&";
