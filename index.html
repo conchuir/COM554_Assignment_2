@@ -37,6 +37,7 @@
             $( document ).ready(function() {
                 buildContent(content_array);
             });
+
 		</script>
 	</head>
 	<body>
@@ -55,31 +56,30 @@
                         </div>
 
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-                            <ul id="nav_ul" class="nav navbar-nav">
-<!--                                <li class="hidden"><a href="#tabs_99">Search</a></li>-->
-<!--
-                                <li class="active"><a href="#tabs_1">Tab 1 <span class="sr-only">(current)</span></a></li>
-                                <li><a href="#tabs_2">Tab 2</a></li>
-                                <li><a href="#tabs_3">Tab 3</a></li>
-                                <li><a href="#tabs_4">Tab 4</a></li>
-                                <li><a href="#tabs_5">Tab 5</a></li>
-                                <li><a href="#tabs_6">Tab 6</a></li>
--->
-                            </ul>
-                            <form class="navbar-form navbar-left" role="search">
+                            <ul id="nav_ul" class="nav navbar-nav"></ul>
+                            <form class="navbar-form navbar-left" action="javascript:void(0);">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Search">
+                                    <input id="search_text" type="text" class="form-control" placeholder="Search" >
                                 </div>
-                                <button type="submit" class="btn btn-default">Submit</button>
+                                <button class="btn btn-default" onclick="search()">Submit</button>
+                                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Tooltip on bottom" onclick="help()">?</button>
                             </form>
                         </div>
                     </div>
                 </nav>
-                <div id="cookie_alert" class="alert alert-dismissible alert-warning">
+
+                <div id="search_help" class="alert alert-dismissible alert-info hidden">
+                    <button type="button" class="close" onclick="hideHelp()">&times;</button>
+                    <h4>Search Help</h4>
+                    Enter a search term in the text box and click <strong>SUBMIT</strong> to search. Results will be displayed below.
+                </div>
+
+                   <div id="cookie_alert" class="alert alert-dismissible alert-warning">
                     <button type="button" class="close" data-dismiss="alert" onclick="cookie_adcknowledge()">&times;</button>
                     <h4>Cookie Warning</h4>
                     <p>Please be aware we may use cookies to enhance your experience. <a href="http://www.bbc.co.uk/webwise/guides/about-cookies">More on cookies.</a></p>
                 </div>
+
             </div>
         </div>
 
