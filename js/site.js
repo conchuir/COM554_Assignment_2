@@ -15,6 +15,8 @@ $( document ).ready(function() {
 function loadNews(url, tab_number) {
     $.getJSON(url, function(data) {
         $items = data['response']['results'];
+        console.log(tab_number);
+        console.log(url);
         console.log($items);
 
         //Add first news item to Jumbrotron box
@@ -28,7 +30,7 @@ function loadNews(url, tab_number) {
         for (i=1; i<$items.length; i++) {
             if (i%3 == 1) {
                 j++;
-                $('#holder_'+tab_number).append('<div class="row_contain" id="row_contain_'+ j +'"></div>');
+                $('#holder_'+tab_number).append('<div class="row_contain" id="row_contain_'+ tab_number +'_'+ j +'"></div>');
             }
 
             var news_item = "\
@@ -46,7 +48,63 @@ function loadNews(url, tab_number) {
                         <div>\
                     </div>\
                 </div>";
-            $("#row_contain_"+j).append(news_item);
+            $("#row_contain_"+ tab_number +"_"+j).append(news_item);
         }
     });
+}
+
+
+// Build tabs and contents
+function buildContent(array)    {
+    // Assuming multi-dimensional array of format: name, id, load point
+    var domain = "https://content.guardianapis.com/";
+    var api_key = "api-key=8b7ca0fc-3914-4473-9c07-e9b56781ce88";
+    var req_fields = "&show-fields=thumbnail";
+
+    // Adds list items to nav bar
+    function addNavItem(name, id)    {
+        var nav_item = "<li><a href=\"#tabs_"+ id +"\">"+ name +"</a></li>";
+        $("#nav_ul").append(nav_item);
+    }
+
+    function addTab(id)   {
+        var tab = "\
+                    <div id=\"tabs_"+ id +"\">\
+                        <div class=\"jumbotron\" id=\"jumbotron_"+ id +"\">\
+                            <h1 id=\"j_title_"+ id +"\"></h1>\
+                            <p><a href=\"\" id=\"j_button_"+ id +"\" class=\"btn btn-primary btn-lg\">View Story</a></p>\
+                        </div>\
+                        <div id='holder_"+ id +"'></div>\
+                    </div>";
+        $("#tabs").append(tab);
+    }
+
+    // Ignore index 0 (headers) in outer array
+    for (i=1; i<array.length; i++)  {
+        var name = array[i][0];
+        var id = array[i][1];
+        var lp = array[i][2]; //lp = load point
+        var ef = array[i][3]; //ef = extra fields
+
+        if (ef != "")   {
+            ef = ef + "&";
+        }
+        else {
+            ef = "?";
+        }
+
+        var url = "" + domain + lp + ef + api_key + req_fields;
+
+        addNavItem(name, id);
+        addTab(id);
+        loadNews(url, id);
+    }
+
+    // Adds a hidden ptab for search reults
+    addTab("99");
+    $("#nav_ul").append("<li class=\"hidden\"><a href=\"#tabs_99\">Search</a></li>");
+
+    $( function() {
+        $( "#tabs" ).tabs();
+    } );
 }

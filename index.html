@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Bootstrap 101 Template</title>
+		<title>The Defender News</title>
 
 		<!-- Bootstrap -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
@@ -21,13 +21,22 @@
 		<![endif]-->
 
 		<script>
-//			var url = "https://content.guardianapis.com/search?api-key=8b7ca0fc-3914-4473-9c07-e9b56781ce88&show-fields=thumbnail";
+            // Define News Section Data
+            // Load point is the URL after domain and before api key
+            var content_array = [
+                ['Name',    'id',   'api_load_point',   'extra_fields'],
+                ['Latest',  '1',    'search',           '?order-by=newest'],
+                ['UK',      '2',    'uk-news',          ''],
+                ['World',   '3',    'world',            ''],
+                ['Poltics', '4',    'politics',         ''],
+                ['Sport',   '5',    'sport',            ''],
+                ['Tech',    '6',    'technology',       ''],
+                ['Popular', '7',    'search',           '?show-editors-picks=true']
+            ];
+
             $( document ).ready(function() {
-                loadNews("https://content.guardianapis.com/search?api-key=8b7ca0fc-3914-4473-9c07-e9b56781ce88&show-fields=thumbnail", 1);
+                buildContent(content_array);
             });
-            $( function() {
-                $( "#tabs" ).tabs();
-            } );
 		</script>
 	</head>
 	<body>
@@ -42,17 +51,20 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">The Defender</a>
+                            <a class="navbar-brand" href="#">The Defender News</a>
                         </div>
 
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-                           <ul class="nav navbar-nav">
+                            <ul id="nav_ul" class="nav navbar-nav">
+<!--                                <li class="hidden"><a href="#tabs_99">Search</a></li>-->
+<!--
                                 <li class="active"><a href="#tabs_1">Tab 1 <span class="sr-only">(current)</span></a></li>
                                 <li><a href="#tabs_2">Tab 2</a></li>
                                 <li><a href="#tabs_3">Tab 3</a></li>
                                 <li><a href="#tabs_4">Tab 4</a></li>
                                 <li><a href="#tabs_5">Tab 5</a></li>
                                 <li><a href="#tabs_6">Tab 6</a></li>
+-->
                             </ul>
                             <form class="navbar-form navbar-left" role="search">
                                 <div class="form-group">
@@ -60,9 +72,6 @@
                                 </div>
                                 <button type="submit" class="btn btn-default">Submit</button>
                             </form>
-                            <ul class="nav navbar-nav navbar-right">
-                                <li><a href="#">Link</a></li>
-                            </ul>
                         </div>
                     </div>
                 </nav>
@@ -70,31 +79,6 @@
                     <button type="button" class="close" data-dismiss="alert" onclick="cookie_adcknowledge()">&times;</button>
                     <h4>Cookie Warning</h4>
                     <p>Please be aware we may use cookies to enhance your experience. <a href="http://www.bbc.co.uk/webwise/guides/about-cookies">More on cookies.</a></p>
-                </div>
-
-                <div id="tabs_1">
-                    <div class="jumbotron" id="jumbotron_1">
-                        <h1 id="j_title_1"></h1>
-                        <p><a href="" id="j_button_1" class="btn btn-primary btn-lg">View Story</a></p>
-                    </div>
-
-                    <div id='holder_1'></div>
-                </div>
-                <div id="tabs_3">
-                    <div class="jumbotron" id="jumbotron_1">
-                        <h1 id="j_title_1"></h1>
-                        <p><a href="" id="j_button_1" class="btn btn-primary btn-lg">View Story</a></p>
-                    </div>
-
-                    <div id='holder_1'></div>
-                </div>
-                <div id="tabs_2">
-                    <div class="jumbotron" id="jumbotron_1">
-                        <h1 id="j_title_1"></h1>
-                        <p><a href="" id="j_button_1" class="btn btn-primary btn-lg">View Story</a></p>
-                    </div>
-
-                    <div id='holder_1'></div>
                 </div>
             </div>
         </div>
