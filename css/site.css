@@ -1,0 +1,17 @@
+.hidden    {
+    display: none;
+}
+
+.row_contain    {
+    height: auto;
+    overflow: auto;
+}
+
+.news_thumb {
+    width: 100%;
+    object-fit: scale-down;
+}
+
+.mark_read    {
+    opacity: 0.5;
+}

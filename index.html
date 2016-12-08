@@ -8,8 +8,12 @@
 
 		<!-- Bootstrap -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/site.css" rel="stylesheet">
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/site.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 		<!--[if lt IE 9]>
 			<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -17,74 +21,83 @@
 		<![endif]-->
 
 		<script>
-			var url = "https://content.guardianapis.com/search?api-key=8b7ca0fc-3914-4473-9c07-e9b56781ce88";
-			var $items;
-			$.getJSON(url, function(data) {
-				$items = data['response']['results'];
-
-				console.log($items);
-				var news = "";
-				for (i=0; i<$items.length; i++) {
-					news += $items[i]['webTitle'];
-					news += '<br />';
-				}
-				console.log(news);
-				$('#holder').append(news);
-			});
+//			var url = "https://content.guardianapis.com/search?api-key=8b7ca0fc-3914-4473-9c07-e9b56781ce88&show-fields=thumbnail";
+            $( document ).ready(function() {
+                loadNews("https://content.guardianapis.com/search?api-key=8b7ca0fc-3914-4473-9c07-e9b56781ce88&show-fields=thumbnail", 1);
+            });
+            $( function() {
+                $( "#tabs" ).tabs();
+            } );
 		</script>
 	</head>
 	<body>
-        <div class="alert alert-dismissible alert-warning">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Cookie Warning</h4>
-            <p>Please be aware we may use cookies to enhance your experience. <a href="http://www.bbc.co.uk/webwise/guides/about-cookies">More on cookies.</a></p>
-        </div>
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">The Defender</a>
+        <div class="container">
+            <div id="tabs">
+                <nav class="navbar navbar-inverse">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="#">The Defender</a>
+                        </div>
+
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                           <ul class="nav navbar-nav">
+                                <li class="active"><a href="#tabs_1">Tab 1 <span class="sr-only">(current)</span></a></li>
+                                <li><a href="#tabs_2">Tab 2</a></li>
+                                <li><a href="#tabs_3">Tab 3</a></li>
+                                <li><a href="#tabs_4">Tab 4</a></li>
+                                <li><a href="#tabs_5">Tab 5</a></li>
+                                <li><a href="#tabs_6">Tab 6</a></li>
+                            </ul>
+                            <form class="navbar-form navbar-left" role="search">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Search">
+                                </div>
+                                <button type="submit" class="btn btn-default">Submit</button>
+                            </form>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="#">Link</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <div id="cookie_alert" class="alert alert-dismissible alert-warning">
+                    <button type="button" class="close" data-dismiss="alert" onclick="cookie_adcknowledge()">&times;</button>
+                    <h4>Cookie Warning</h4>
+                    <p>Please be aware we may use cookies to enhance your experience. <a href="http://www.bbc.co.uk/webwise/guides/about-cookies">More on cookies.</a></p>
                 </div>
 
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-                   <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                        <li><a href="#">Link</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">One more separated link</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <form class="navbar-form navbar-left" role="search">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search">
-                        </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </form>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">Link</a></li>
-                    </ul>
+                <div id="tabs_1">
+                    <div class="jumbotron" id="jumbotron_1">
+                        <h1 id="j_title_1"></h1>
+                        <p><a href="" id="j_button_1" class="btn btn-primary btn-lg">View Story</a></p>
+                    </div>
+
+                    <div id='holder_1'></div>
+                </div>
+                <div id="tabs_3">
+                    <div class="jumbotron" id="jumbotron_1">
+                        <h1 id="j_title_1"></h1>
+                        <p><a href="" id="j_button_1" class="btn btn-primary btn-lg">View Story</a></p>
+                    </div>
+
+                    <div id='holder_1'></div>
+                </div>
+                <div id="tabs_2">
+                    <div class="jumbotron" id="jumbotron_1">
+                        <h1 id="j_title_1"></h1>
+                        <p><a href="" id="j_button_1" class="btn btn-primary btn-lg">View Story</a></p>
+                    </div>
+
+                    <div id='holder_1'></div>
                 </div>
             </div>
-        </nav>
+        </div>
 
-		<h1>Hello, world!</h1>
-		<div id='holder'></div>
-
-		<!-- Include all compiled plugins (below), or include individual files as needed -->
-		<script src="js/bootstrap.min.js"></script>
 	</body>
 </html>
