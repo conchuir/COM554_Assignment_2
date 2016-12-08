@@ -1,9 +1,11 @@
 //Cookie Management
 function cookie_adcknowledge() {
+    "use strict";
     localStorage.setItem("cookie_acknowledge", true);
 }
 
-$( document ).ready(function() {
+$(document).ready(function () {
+    "use strict";
     if (localStorage.getItem("cookie_acknowledge")) {
         $('#cookie_alert').addClass('hidden');
     }
@@ -15,9 +17,6 @@ $( document ).ready(function() {
 function loadNews(url, tab_number) {
     $.getJSON(url, function(data) {
         $items = data['response']['results'];
-        console.log(tab_number);
-        console.log(url);
-        console.log($items);
 
         //Add first news item to Jumbrotron box
         $("#j_button_"+ tab_number).attr("href", $items[0]['webUrl']);
@@ -56,12 +55,14 @@ function loadNews(url, tab_number) {
 
 // Adds tab list items to nav bar
 function addNavItem(name, id)    {
+    "use strict";
     var nav_item = "<li><a href=\"#tabs_"+ id +"\">"+ name +"</a></li>";
     $("#nav_ul").append(nav_item);
 }
 
 // Adds tab items to page
 function addTab(id)   {
+    "use strict";
     var tab = "\
                 <div id=\"tabs_"+ id +"\">\
                     <div class=\"jumbotron\" id=\"jumbotron_"+ id +"\">\
@@ -75,9 +76,10 @@ function addTab(id)   {
 
 // Build tabs and contents
 function buildContent(array)    {
+    "use strict";
     // Assuming multi-dimensional array of format: name, id, load point
     // Ignore index 0 (headers) in outer array
-    for (i=1; i<array.length; i++)  {
+    for (var i=1; i<array.length; i++)  {
         var name = array[i][0];
         var id = array[i][1];
         var lp = array[i][2]; //lp = load point
@@ -101,6 +103,7 @@ function buildContent(array)    {
 
 // Build api request url
 function buildUrl(lp, ef)    {
+    "use strict";
     var domain = "https://content.guardianapis.com/";
     var api_key = "api-key=8b7ca0fc-3914-4473-9c07-e9b56781ce88";
     var req_fields = "&show-fields=thumbnail";
@@ -119,6 +122,7 @@ function buildUrl(lp, ef)    {
 
 // Search bar javascript
 function search() {
+    "use strict";
     // Pull query and build url
     var query = $("#search_text").val().replace(/ /g, '%20');
     var url = buildUrl("search", "?q=" + query);
